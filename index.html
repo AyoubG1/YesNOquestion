@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chrayek Abbes? 🎯</title>
+    <title>Bourguiba is the goat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -83,7 +83,7 @@
             </div>
             
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 leading-tight">
-                Chrayek <span class="text-purple-600">Abbes</span>? 🎯
+                <span class="text-purple-600">Bourguiba</span> is the goat 🐐
             </h1>
             
             <!-- Buttons Container -->
@@ -93,7 +93,7 @@
                     id="yes-btn"
                     class="btn-transition bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 whitespace-nowrap"
                 >
-                    Mwahra lfaze ✅
+                    Yes ✅
                 </button>
                 
                 <!-- No Button -->
@@ -101,7 +101,7 @@
                     id="no-btn"
                     class="no-btn bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg whitespace-nowrap relative"
                 >
-                    ka3be be ❌
+                    No ❌
                 </button>
             </div>
         </div>
@@ -113,15 +113,15 @@
                     <span class="text-6xl">🎉</span>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">
-                    I knew it! 🥰
+                    Correct! 🐐
                 </h2>
-                <p class="text-gray-600 mb-6">You can't escape the truth!</p>
+                <p class="text-gray-600 mb-6">Here’s Bourguiba for you.</p>
                 
                 <!-- Celebration Image -->
                 <div class="rounded-2xl overflow-hidden shadow-xl mb-6">
                     <img 
-                        src="http://static.photos/happy/640x360/42" 
-                        alt="Happy celebration"
+                        src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Habib_Bourguiba_in_1984.jpg"
+                        alt="Habib Bourguiba"
                         class="w-full h-48 object-cover"
                         id="celebration-img"
                     >
@@ -140,7 +140,7 @@
     
     <!-- Instructions -->
     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm text-center">
-        <p>Try to click "ka3be be"... if you can! 😏</p>
+        <p>Try to click "No"... if you can! 😏</p>
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -161,20 +161,30 @@
         let lastMoveTime = 0;
         const moveThrottle = 50; // Minimum ms between moves
         let isEscaping = false; // Track if button has started escaping
+        const movePadding = 16;
+        const maxJump = 220;
         
-        // Use viewport-based positioning for farther teleportation
-        function getRandomFarPosition() {
+        // Keep the button inside the viewport while limiting travel distance.
+        function getRandomPositionWithinBounds() {
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
             const btnRect = noBtn.getBoundingClientRect();
-            
-            // Calculate available space (keep button fully on screen)
-            const maxX = viewportWidth - btnRect.width - 20;
-            const maxY = viewportHeight - btnRect.height - 20;
-            
+            const currentX = btnRect.left;
+            const currentY = btnRect.top;
+
+            const minX = movePadding;
+            const minY = movePadding;
+            const maxX = viewportWidth - btnRect.width - movePadding;
+            const maxY = viewportHeight - btnRect.height - movePadding;
+
+            const targetMinX = Math.max(minX, currentX - maxJump);
+            const targetMaxX = Math.min(maxX, currentX + maxJump);
+            const targetMinY = Math.max(minY, currentY - maxJump);
+            const targetMaxY = Math.min(maxY, currentY + maxJump);
+
             return {
-                x: Math.random() * maxX + 10,
-                y: Math.random() * maxY + 10
+                x: targetMinX + Math.random() * Math.max(0, targetMaxX - targetMinX),
+                y: targetMinY + Math.random() * Math.max(0, targetMaxY - targetMinY)
             };
         }
         
@@ -203,7 +213,7 @@
                     isEscaping = true;
                 }
                 
-                const newPos = getRandomFarPosition();
+                const newPos = getRandomPositionWithinBounds();
                 
                 // Use fixed positioning for full viewport movement
                 noBtn.style.position = 'fixed';
@@ -213,7 +223,7 @@
                 noBtn.style.zIndex = '9999';
                 
                 // Add taunts
-                const taunts = ['ka3be! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Nope! ✋', 'Fast! ⚡'];
+                const taunts = ['Nope! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Not today! ✋', 'Fast! ⚡'];
                 noBtn.textContent = taunts[Math.floor(Math.random() * taunts.length)];
                 
                 // Reset scale after animation
@@ -286,7 +296,7 @@
             noBtn.style.top = 'auto';
             noBtn.style.transform = 'none';
             noBtn.style.zIndex = 'auto';
-            noBtn.textContent = 'ka3be be ❌';
+            noBtn.textContent = 'No ❌';
         });
         
         // Create floating hearts
