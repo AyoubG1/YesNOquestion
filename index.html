@@ -161,21 +161,20 @@
         let lastMoveTime = 0;
         const moveThrottle = 50; // Minimum ms between moves
         let isEscaping = false; // Track if button has started escaping
-        const movePadding = 16;
-        const maxJump = 220;
+        const movePadding = 12;
+        const maxJump = 180;
         
-        // Keep the button inside the viewport while limiting travel distance.
+        // Keep the button inside the main container while limiting travel distance.
         function getRandomPositionWithinBounds() {
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
+            const containerRect = container.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
             const currentX = btnRect.left;
             const currentY = btnRect.top;
 
-            const minX = movePadding;
-            const minY = movePadding;
-            const maxX = viewportWidth - btnRect.width - movePadding;
-            const maxY = viewportHeight - btnRect.height - movePadding;
+            const minX = containerRect.left + movePadding;
+            const minY = containerRect.top + movePadding;
+            const maxX = containerRect.right - btnRect.width - movePadding;
+            const maxY = containerRect.bottom - btnRect.height - movePadding;
 
             const targetMinX = Math.max(minX, currentX - maxJump);
             const targetMaxX = Math.min(maxX, currentX + maxJump);
