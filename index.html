@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chrayek Abbes? 🎯</title>
+    <title>Yes or No? 💌</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -83,7 +83,7 @@
             </div>
             
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 leading-tight">
-                Chrayek <span class="text-purple-600">Abbes</span>? 🎯
+                Will you be my <span class="text-purple-600">valentine</span>? 💌
             </h1>
             
             <!-- Buttons Container -->
@@ -93,7 +93,7 @@
                     id="yes-btn"
                     class="btn-transition bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 whitespace-nowrap"
                 >
-                    Mwahra lfaze ✅
+                    Yes ✅
                 </button>
                 
                 <!-- No Button -->
@@ -101,7 +101,7 @@
                     id="no-btn"
                     class="no-btn bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg whitespace-nowrap relative"
                 >
-                    ka3be be ❌
+                    No ❌
                 </button>
             </div>
         </div>
@@ -113,15 +113,15 @@
                     <span class="text-6xl">🎉</span>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">
-                    I knew it! 🥰
+                    Yay! 💖
                 </h2>
-                <p class="text-gray-600 mb-6">You can't escape the truth!</p>
+                <p class="text-gray-600 mb-6">You just made my day!</p>
                 
                 <!-- Celebration Image -->
                 <div class="rounded-2xl overflow-hidden shadow-xl mb-6">
                     <img 
-                        src="http://static.photos/happy/640x360/42" 
-                        alt="Happy celebration"
+                        src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=80"
+                        alt="Couple holding balloons"
                         class="w-full h-48 object-cover"
                         id="celebration-img"
                     >
@@ -140,7 +140,7 @@
     
     <!-- Instructions -->
     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm text-center">
-        <p>Try to click "ka3be be"... if you can! 😏</p>
+        <p>Try to click "No"... if you can! 😏</p>
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -213,7 +213,7 @@
                 noBtn.style.zIndex = '9999';
                 
                 // Add taunts
-                const taunts = ['ka3be! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Nope! ✋', 'Fast! ⚡'];
+                const taunts = ['Nope! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Not today! ✋', 'Fast! ⚡'];
                 noBtn.textContent = taunts[Math.floor(Math.random() * taunts.length)];
                 
                 // Reset scale after animation
@@ -286,7 +286,7 @@
             noBtn.style.top = 'auto';
             noBtn.style.transform = 'none';
             noBtn.style.zIndex = 'auto';
-            noBtn.textContent = 'ka3be be ❌';
+            noBtn.textContent = 'No ❌';
         });
         
         // Create floating hearts
