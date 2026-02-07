@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- codex/create-interactive-question-website-d2wief
-    <title>Bourguiba is the goat</title>
-
-    <title>Yes or No? 💌</title>
- main
+    <title>ch9awlek ?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -21,8 +17,8 @@
         }
         
         .no-btn {
-            position: absolute;
-            transition: transform 0.15s ease-out;
+            position: relative;
+            transition: transform 0.15s ease-out, left 0.25s ease, top 0.25s ease;
             will-change: transform, left, top;
         }
         
@@ -87,11 +83,7 @@
             </div>
             
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 leading-tight">
- codex/create-interactive-question-website-d2wief
-                <span class="text-purple-600">Bourguiba</span> is the goat 🐐
-
-                Will you be my <span class="text-purple-600">valentine</span>? 💌
- main
+                ch9awlek ?
             </h1>
             
             <!-- Buttons Container -->
@@ -101,7 +93,7 @@
                     id="yes-btn"
                     class="btn-transition bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 whitespace-nowrap"
                 >
-                    Yes ✅
+                    mrigla
                 </button>
                 
                 <!-- No Button -->
@@ -109,7 +101,7 @@
                     id="no-btn"
                     class="no-btn bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg whitespace-nowrap relative"
                 >
-                    No ❌
+                    mehech hiya
                 </button>
             </div>
         </div>
@@ -121,30 +113,9 @@
                     <span class="text-6xl">🎉</span>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">
- codex/create-interactive-question-website-d2wief
-                    Correct! 🐐
+                    mrigla! 🎉
                 </h2>
-                <p class="text-gray-600 mb-6">Here’s Bourguiba for you.</p>
-
-                    Yay! 💖
-                </h2>
-                <p class="text-gray-600 mb-6">You just made my day!</p>
- main
-                
-                <!-- Celebration Image -->
-                <div class="rounded-2xl overflow-hidden shadow-xl mb-6">
-                    <img 
- codex/create-interactive-question-website-d2wief
-                        src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Habib_Bourguiba_in_1984.jpg"
-                        alt="Habib Bourguiba"
-
-                        src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=80"
-                        alt="Couple holding balloons"
- main
-                        class="w-full h-48 object-cover"
-                        id="celebration-img"
-                    >
-                </div>
+                <p class="text-gray-600 mb-6">mt7ad</p>
                 
                 <button 
                     id="reset-btn"
@@ -159,7 +130,7 @@
     
     <!-- Instructions -->
     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm text-center">
-        <p>Try to click "No"... if you can! 😏</p>
+        <p>Try to click "mehech hiya"... if you can! 😏</p>
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -181,24 +152,38 @@
         const moveThrottle = 50; // Minimum ms between moves
         let isEscaping = false; // Track if button has started escaping
         const movePadding = 12;
-        const maxJump = 180;
+        const maxJump = 120;
+        let initialNoPosition = null;
         
+        function getContainerBounds() {
+            const containerRect = container.getBoundingClientRect();
+            return {
+                minX: movePadding,
+                minY: movePadding,
+                maxX: containerRect.width - noBtn.offsetWidth - movePadding,
+                maxY: containerRect.height - noBtn.offsetHeight - movePadding
+            };
+        }
+
+        function getCurrentNoPosition() {
+            if (!initialNoPosition) {
+                return { x: 0, y: 0 };
+            }
+            return {
+                x: parseFloat(noBtn.style.left || `${initialNoPosition.x}`),
+                y: parseFloat(noBtn.style.top || `${initialNoPosition.y}`)
+            };
+        }
+
         // Keep the button inside the main container while limiting travel distance.
         function getRandomPositionWithinBounds() {
-            const containerRect = container.getBoundingClientRect();
-            const btnRect = noBtn.getBoundingClientRect();
-            const currentX = btnRect.left;
-            const currentY = btnRect.top;
+            const bounds = getContainerBounds();
+            const current = getCurrentNoPosition();
 
-            const minX = containerRect.left + movePadding;
-            const minY = containerRect.top + movePadding;
-            const maxX = containerRect.right - btnRect.width - movePadding;
-            const maxY = containerRect.bottom - btnRect.height - movePadding;
-
-            const targetMinX = Math.max(minX, currentX - maxJump);
-            const targetMaxX = Math.min(maxX, currentX + maxJump);
-            const targetMinY = Math.max(minY, currentY - maxJump);
-            const targetMaxY = Math.min(maxY, currentY + maxJump);
+            const targetMinX = Math.max(bounds.minX, current.x - maxJump);
+            const targetMaxX = Math.min(bounds.maxX, current.x + maxJump);
+            const targetMinY = Math.max(bounds.minY, current.y - maxJump);
+            const targetMaxY = Math.min(bounds.maxY, current.y + maxJump);
 
             return {
                 x: targetMinX + Math.random() * Math.max(0, targetMaxX - targetMinX),
@@ -233,12 +218,12 @@
                 
                 const newPos = getRandomPositionWithinBounds();
                 
-                // Use fixed positioning for full viewport movement
-                noBtn.style.position = 'fixed';
+                // Use absolute positioning inside the container
+                noBtn.style.position = 'absolute';
                 noBtn.style.left = `${newPos.x}px`;
                 noBtn.style.top = `${newPos.y}px`;
                 noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(0.95)`;
-                noBtn.style.zIndex = '9999';
+                noBtn.style.zIndex = '10';
                 
                 // Add taunts
                 const taunts = ['Nope! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Not today! ✋', 'Fast! ⚡'];
@@ -302,6 +287,26 @@
             }, 300);
         });
         
+        function lockInitialNoPosition() {
+            const noRect = noBtn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            initialNoPosition = {
+                x: Math.max(movePadding, noRect.left - containerRect.left),
+                y: Math.max(movePadding, noRect.top - containerRect.top)
+            };
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${initialNoPosition.x}px`;
+            noBtn.style.top = `${initialNoPosition.y}px`;
+        }
+
+        window.addEventListener('load', () => {
+            lockInitialNoPosition();
+        });
+
+        window.addEventListener('resize', () => {
+            lockInitialNoPosition();
+        });
+
         // Reset button
         resetBtn.addEventListener('click', () => {
             successSection.classList.add('hidden');
@@ -309,12 +314,10 @@
             
             // Reset No button to initial state
             isEscaping = false;
-            noBtn.style.position = 'relative';
-            noBtn.style.left = 'auto';
-            noBtn.style.top = 'auto';
+            lockInitialNoPosition();
             noBtn.style.transform = 'none';
             noBtn.style.zIndex = 'auto';
-            noBtn.textContent = 'No ❌';
+            noBtn.textContent = 'mehech hiya';
         });
         
         // Create floating hearts
