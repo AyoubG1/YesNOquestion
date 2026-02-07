@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ codex/create-interactive-question-website-d2wief
+    <title>Bourguiba is the goat</title>
+
     <title>Yes or No? 💌</title>
+ main
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -83,7 +87,11 @@
             </div>
             
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 leading-tight">
+ codex/create-interactive-question-website-d2wief
+                <span class="text-purple-600">Bourguiba</span> is the goat 🐐
+
                 Will you be my <span class="text-purple-600">valentine</span>? 💌
+ main
             </h1>
             
             <!-- Buttons Container -->
@@ -113,15 +121,26 @@
                     <span class="text-6xl">🎉</span>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">
+ codex/create-interactive-question-website-d2wief
+                    Correct! 🐐
+                </h2>
+                <p class="text-gray-600 mb-6">Here’s Bourguiba for you.</p>
+
                     Yay! 💖
                 </h2>
                 <p class="text-gray-600 mb-6">You just made my day!</p>
+ main
                 
                 <!-- Celebration Image -->
                 <div class="rounded-2xl overflow-hidden shadow-xl mb-6">
                     <img 
+ codex/create-interactive-question-website-d2wief
+                        src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Habib_Bourguiba_in_1984.jpg"
+                        alt="Habib Bourguiba"
+
                         src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=80"
                         alt="Couple holding balloons"
+ main
                         class="w-full h-48 object-cover"
                         id="celebration-img"
                     >
@@ -161,20 +180,29 @@
         let lastMoveTime = 0;
         const moveThrottle = 50; // Minimum ms between moves
         let isEscaping = false; // Track if button has started escaping
+        const movePadding = 12;
+        const maxJump = 180;
         
-        // Use viewport-based positioning for farther teleportation
-        function getRandomFarPosition() {
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
+        // Keep the button inside the main container while limiting travel distance.
+        function getRandomPositionWithinBounds() {
+            const containerRect = container.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
-            
-            // Calculate available space (keep button fully on screen)
-            const maxX = viewportWidth - btnRect.width - 20;
-            const maxY = viewportHeight - btnRect.height - 20;
-            
+            const currentX = btnRect.left;
+            const currentY = btnRect.top;
+
+            const minX = containerRect.left + movePadding;
+            const minY = containerRect.top + movePadding;
+            const maxX = containerRect.right - btnRect.width - movePadding;
+            const maxY = containerRect.bottom - btnRect.height - movePadding;
+
+            const targetMinX = Math.max(minX, currentX - maxJump);
+            const targetMaxX = Math.min(maxX, currentX + maxJump);
+            const targetMinY = Math.max(minY, currentY - maxJump);
+            const targetMaxY = Math.min(maxY, currentY + maxJump);
+
             return {
-                x: Math.random() * maxX + 10,
-                y: Math.random() * maxY + 10
+                x: targetMinX + Math.random() * Math.max(0, targetMaxX - targetMinX),
+                y: targetMinY + Math.random() * Math.max(0, targetMaxY - targetMinY)
             };
         }
         
@@ -203,7 +231,7 @@
                     isEscaping = true;
                 }
                 
-                const newPos = getRandomFarPosition();
+                const newPos = getRandomPositionWithinBounds();
                 
                 // Use fixed positioning for full viewport movement
                 noBtn.style.position = 'fixed';
