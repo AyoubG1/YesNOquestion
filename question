@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrayek Abbes? 🎯</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+        
+        .btn-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .no-btn {
+            position: absolute;
+            transition: transform 0.15s ease-out;
+            will-change: transform, left, top;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .pop-in {
+            animation: popIn 0.5s ease-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: heartFloat 1s ease-out forwards;
+        }
+        
+        @keyframes heartFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center relative">
+    
+    <!-- Main Container -->
+    <div id="main-container" class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full mx-4 text-center relative">
+        
+        <!-- Question Section -->
+        <div id="question-section">
+            <div class="mb-6">
+                <span class="text-6xl float inline-block">🤔</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 leading-tight">
+                Chrayek <span class="text-purple-600">Abbes</span>? 🎯
+            </h1>
+            
+            <!-- Buttons Container -->
+            <div class="relative h-24 flex items-center justify-center gap-4" id="buttons-container">
+                <!-- Yes Button -->
+                <button 
+                    id="yes-btn"
+                    class="btn-transition bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 whitespace-nowrap"
+                >
+                    Mwahra lfaze ✅
+                </button>
+                
+                <!-- No Button -->
+                <button 
+                    id="no-btn"
+                    class="no-btn bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg whitespace-nowrap relative"
+                >
+                    ka3be be ❌
+                </button>
+            </div>
+        </div>
+        
+        <!-- Success Section (Hidden by default) -->
+        <div id="success-section" class="hidden">
+            <div class="pop-in">
+                <div class="mb-4">
+                    <span class="text-6xl">🎉</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">
+                    I knew it! 🥰
+                </h2>
+                <p class="text-gray-600 mb-6">You can't escape the truth!</p>
+                
+                <!-- Celebration Image -->
+                <div class="rounded-2xl overflow-hidden shadow-xl mb-6">
+                    <img 
+                        src="http://static.photos/happy/640x360/42" 
+                        alt="Happy celebration"
+                        class="w-full h-48 object-cover"
+                        id="celebration-img"
+                    >
+                </div>
+                
+                <button 
+                    id="reset-btn"
+                    class="btn-transition bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-full shadow-lg"
+                >
+                    Play Again 🔄
+                </button>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Instructions -->
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm text-center">
+        <p>Try to click "ka3be be"... if you can! 😏</p>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Get elements
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const questionSection = document.getElementById('question-section');
+        const successSection = document.getElementById('success-section');
+        const resetBtn = document.getElementById('reset-btn');
+        const container = document.getElementById('main-container');
+        
+        // No button escape functionality - optimized for performance
+        const escapeDistance = 120; // Minimum distance from mouse
+        let lastMoveTime = 0;
+        const moveThrottle = 50; // Minimum ms between moves
+        let isEscaping = false; // Track if button has started escaping
+        
+        // Use viewport-based positioning for farther teleportation
+        function getRandomFarPosition() {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Calculate available space (keep button fully on screen)
+            const maxX = viewportWidth - btnRect.width - 20;
+            const maxY = viewportHeight - btnRect.height - 20;
+            
+            return {
+                x: Math.random() * maxX + 10,
+                y: Math.random() * maxY + 10
+            };
+        }
+        
+        function moveButtonAway(mouseX, mouseY) {
+            // Throttle for performance
+            const now = Date.now();
+            if (now - lastMoveTime < moveThrottle) return;
+            
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            
+            // Quick distance check (avoid sqrt when possible)
+            const dx = mouseX - btnCenterX;
+            const dy = mouseY - btnCenterY;
+            const distanceSquared = dx * dx + dy * dy;
+            const escapeDistanceSquared = escapeDistance * escapeDistance;
+            
+            // If mouse is too close, teleport the button far away
+            if (distanceSquared < escapeDistanceSquared) {
+                lastMoveTime = now;
+                
+                // First escape - switch to fixed positioning and move far away
+                if (!isEscaping) {
+                    isEscaping = true;
+                }
+                
+                const newPos = getRandomFarPosition();
+                
+                // Use fixed positioning for full viewport movement
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${newPos.x}px`;
+                noBtn.style.top = `${newPos.y}px`;
+                noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(0.95)`;
+                noBtn.style.zIndex = '9999';
+                
+                // Add taunts
+                const taunts = ['ka3be! 😜', 'Too slow! 🏃‍♂️', 'Catch me! 🏃', 'Missed! 😎', 'Nope! ✋', 'Fast! ⚡'];
+                noBtn.textContent = taunts[Math.floor(Math.random() * taunts.length)];
+                
+                // Reset scale after animation
+                setTimeout(() => {
+                    noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg) scale(1)`;
+                }, 150);
+            }
+        }
+        
+        // Use requestAnimationFrame for smooth performance
+        let mouseX = 0;
+        let mouseY = 0;
+        let isTracking = false;
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!successSection.classList.contains('hidden')) return;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (!isTracking) {
+                isTracking = true;
+                requestAnimationFrame(() => {
+                    moveButtonAway(mouseX, mouseY);
+                    isTracking = false;
+                });
+            }
+        }, { passive: true });
+        
+        // Touch support with throttling
+        let touchThrottle = false;
+        document.addEventListener('touchmove', (e) => {
+            if (!successSection.classList.contains('hidden')) return;
+            if (touchThrottle) return;
+            
+            touchThrottle = true;
+            const touch = e.touches[0];
+            moveButtonAway(touch.clientX, touch.clientY);
+            
+            setTimeout(() => touchThrottle = false, 50);
+        }, { passive: true });
+        
+        // Prevent clicking on No button
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButtonAway(e.clientX, e.clientY);
+        });
+        
+        // Yes button functionality
+        yesBtn.addEventListener('click', () => {
+            // Create heart particles
+            createHearts();
+            
+            // Show success section
+            setTimeout(() => {
+                questionSection.classList.add('hidden');
+                successSection.classList.remove('hidden');
+                createConfetti();
+            }, 300);
+        });
+        
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            successSection.classList.add('hidden');
+            questionSection.classList.remove('hidden');
+            
+            // Reset No button to initial state
+            isEscaping = false;
+            noBtn.style.position = 'relative';
+            noBtn.style.left = 'auto';
+            noBtn.style.top = 'auto';
+            noBtn.style.transform = 'none';
+            noBtn.style.zIndex = 'auto';
+            noBtn.textContent = 'ka3be be ❌';
+        });
+        
+        // Create floating hearts
+        function createHearts() {
+            const hearts = ['❤️', '💖', '💕', '💗', '💓', '💝'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle text-2xl';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = '50%';
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 1000);
+                }, i * 50);
+            }
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = '-10px';
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+        
+        // Add falling animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
